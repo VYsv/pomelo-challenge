@@ -1,13 +1,15 @@
 'use strict'
 
 const Hapi = require('@hapi/hapi')
+const axios = require('axios')
 const init = async() => {
     const server = Hapi.server({
         host: 'localhost',
         port: 8000
     });
 
-    server.route({
+    server.route([{
+        // PART 1
         method: 'POST',
         path: '/pomelo',
         handler: (request, h) => {
@@ -43,8 +45,28 @@ const init = async() => {
                 })
             }
             return result
-        }   
-    });
+        }
+    },{
+        // PART 2
+        method: 'GET',
+        path: '/github-search',
+        handler: async (request, h) => {
+            const page = request.query.page
+            const per_page = request.query.per_page
+            console.log(page);
+            console.log(per_page);
+            const req = await axios({
+                baseURL: `https://api.github.com`,
+                url: `/search/repositories?q=nodejs&per_page=${per_page}&page=${page}`,
+                headers: {
+                    'User-Agent': 'request'
+                },
+                method: 'get'
+            })
+            console.log(req.data);
+            return "<h1>Hello</h1>"
+        }
+    }]);
 
     await server.start()
     console.log(`Server started on: ${server.info.uri}`)

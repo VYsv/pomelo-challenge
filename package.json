@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/VYsv/pomelo-challenge#readme",
   "dependencies": {
-    "@hapi/hapi": "^20.1.4"
+    "@hapi/hapi": "^20.1.4",
+    "axios": "^0.21.1"
   }
 }
