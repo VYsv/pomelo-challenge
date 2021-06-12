@@ -2,11 +2,23 @@
 
 const Hapi = require('@hapi/hapi')
 const axios = require('axios')
+const path = require('path')
 const init = async() => {
     const server = Hapi.server({
         host: 'localhost',
         port: 8000
     });
+
+    await server.register([{
+        plugin: require('@hapi/vision')
+    }])
+
+    server.views({
+        engines: {
+            hbs: require('handlebars')
+        },
+        path: path.join(__dirname, 'views'),
+    })
 
     server.route([{
         // PART 1
@@ -51,10 +63,8 @@ const init = async() => {
         method: 'GET',
         path: '/github-search',
         handler: async (request, h) => {
-            const page = request.query.page
-            const per_page = request.query.per_page
-            console.log(page);
-            console.log(per_page);
+            const page = parseInt(request.query.page)
+            const per_page = parseInt(request.query.per_page)
             const req = await axios({
                 baseURL: `https://api.github.com`,
                 url: `/search/repositories?q=nodejs&per_page=${per_page}&page=${page}`,
@@ -63,8 +73,24 @@ const init = async() => {
                 },
                 method: 'get'
             })
-            console.log(req.data);
-            return "<h1>Hello</h1>"
+            const result = {
+                next: page + 1,
+                page: page,
+                prev: page - 1,
+                per_page: per_page,
+                result: []
+            }
+            if (page == 1) {
+                result.prev = page
+            }
+            if (page == 10) {
+                result.next = page
+            }
+            var items = req.data.items
+            items.forEach((item) => {
+                result.result.push({"name": item.full_name, "url": item.html_url})
+            })
+            return h.view('index', result)
         }
     }]);
 

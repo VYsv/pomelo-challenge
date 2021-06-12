@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="repo">
+    <table>
+        <thead>
+            <th>Repo</th>
+        <thead>
+        <tbody>
+            {{#each result}}
+                <tr>
+                    <td><a onclick="window.open(`{{ this.url }}`, '_blank')">{{ this.name }}</a></td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    </div>
+    <div id="pagination">
+        <a href="/github-search?page={{ prev }}&per_page=10" class="previous">&#8249;</a>
+        <a href="/github-search?page=1&per_page=10" class="pageNum">1</a>
+        <a href="/github-search?page=2&per_page=10" class="pageNum">2</a>
+        <a href="/github-search?page=3&per_page=10" class="pageNum">3</a>
+        <a href="/github-search?page=4&per_page=10" class="pageNum">4</a>
+        <a href="/github-search?page=5&per_page=10" class="pageNum">5</a>
+        <a href="/github-search?page=6&per_page=10" class="pageNum">6</a>
+        <a href="/github-search?page=7&per_page=10" class="pageNum">7</a>
+        <a href="/github-search?page=8&per_page=10" class="pageNum">8</a>
+        <a href="/github-search?page=9&per_page=10" class="pageNum">9</a>
+        <a href="/github-search?page=10&per_page=10" class="pageNum">10</a>
+        <a href="/github-search?page={{ next }}&per_page=10" class="next">&#8250;</a>
+    </div>
+</body>
+</html>
